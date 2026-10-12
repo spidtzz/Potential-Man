@@ -35,7 +35,7 @@ html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
 .sb{position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:oklch(.22 .05 var(--h));z-index:50;pointer-events:none}
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Space Grotesk","Helvetica Neue",Arial,sans-serif;line-height:1.45}
-main{max-width:1100px;margin:0 auto;padding:18px 14px 36px;display:grid;gap:16px;grid-template-columns:minmax(0,1.4fr) minmax(280px,1fr);align-items:start}
+main{max-width:1100px;margin:0 auto;padding:14px 14px 36px;display:grid;gap:16px;grid-template-columns:minmax(0,1.4fr) minmax(280px,1fr);align-items:start}
 @media (max-width:820px){main{grid-template-columns:minmax(0,1fr)}}
 h1{grid-column:1/-1;margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(30px,6vw,52px);letter-spacing:.01em;line-height:1.05}
 .stage,.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
@@ -60,15 +60,16 @@ input[type=color]{width:100%;height:38px;padding:2px;border-radius:9px;border:1p
 .check{display:flex;align-items:center;gap:8px}
 fieldset{min-width:0;margin:0;border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:12px}
 legend{font-weight:700;padding:0 6px}
-h1{padding-inline-end:56px}
+.topbar{position:relative;max-width:1100px;margin:0 auto;padding:18px 14px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.topbar h1{margin:0;padding:0}
 .lab{display:flex;align-items:baseline;gap:6px}
 output{font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
 .lab output::before{content:"\00b7";margin-inline-end:6px}
 .two>*{min-width:0}
 @media (max-width:340px){.two{grid-template-columns:1fr}}
-.gear{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);inset-inline-end:calc(env(safe-area-inset-right,0px) + 12px);z-index:60;width:42px;height:42px;padding:0;display:grid;place-items:center;border-radius:50%;background:var(--panel);border:1px solid var(--line);color:var(--ink)}
+.gear{flex:none;width:42px;height:42px;padding:0;display:grid;place-items:center;border-radius:50%;background:var(--panel);border:1px solid var(--line);color:var(--ink)}
 .gear svg{width:22px;height:22px}
-.pop{position:fixed;top:calc(env(safe-area-inset-top,0px) + 60px);inset-inline-end:calc(env(safe-area-inset-right,0px) + 12px);z-index:60;width:min(260px,calc(100vw - 24px));display:grid;gap:12px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.pop{position:absolute;top:calc(100% + 6px);inset-inline-end:14px;z-index:60;width:min(320px,calc(100vw - 28px));display:grid;gap:12px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .pop[hidden]{display:none}
 :root{color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark}}
@@ -79,7 +80,18 @@ button svg{width:18px;height:18px;flex:none}
 button[hidden]{display:none}
 html[lang="fa"] body,html[lang="fa"] button,html[lang="fa"] select,html[lang="fa"] input,html[lang="fa"] textarea{font-family:Vazirmatn,"Space Grotesk","Geeza Pro",system-ui,sans-serif}
 html[lang="fa"] h1{font-family:Vazirmatn,Anton,sans-serif;font-weight:800}
-.pop label{display:grid;gap:5px;font-size:14px;font-weight:700}
+.pop label,.pop .field{display:grid;gap:5px;font-size:14px;font-weight:700}
+.ddbtn{width:100%;justify-content:space-between;gap:8px;padding:9px 11px;border-radius:9px;border:1px solid var(--line);background:var(--field);color:var(--ink);font-weight:500;text-align:start}
+.ddlbl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:start}
+.ddbtn svg{width:16px;height:16px;opacity:.7;transition:transform .15s}
+.ddbtn.dd[aria-expanded="true"] svg{transform:rotate(180deg)}
+.gifopts .ddbtn{width:auto;min-width:120px}
+.ddlist{position:fixed;z-index:80;margin:0;padding:6px;list-style:none;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);max-height:min(320px,50vh);overflow:auto;color:var(--ink);font-size:15px}
+.ddlist[hidden]{display:none}
+.ddlist li{padding:9px 11px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.ddlist li.act{background:var(--field)}
+.ddlist li[aria-selected="true"]{font-weight:700}
+.ddlist li[aria-selected="true"]::after{content:"\2713";margin-inline-start:auto;color:var(--accent)}
 .gifopts{align-items:center}
 .gifopts label{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700}
 .gifopts select{width:auto;padding:6px 10px}
@@ -87,14 +99,17 @@ html[lang="fa"] h1{font-family:Vazirmatn,Anton,sans-serif;font-weight:800}
 </head>
 <body>
 <div class="sb" aria-hidden="true"></div>
+<header class="topbar">
+<h1>Potential-Man</h1>
 <button class="gear" id="gear" type="button" data-i18n-aria="settings" aria-label="Settings" aria-expanded="false" aria-controls="pop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 <div class="pop" id="pop" hidden>
  <label><span data-i18n="language">Language</span><select id="lang"><option value="en">English</option><option value="fa">فارسی</option></select></label>
  <label><span data-i18n="mode">Mode</span><select id="mode"><option value="system" data-i18n="m_system">System</option><option value="light" data-i18n="m_light">Light</option><option value="dark" data-i18n="m_dark">Dark</option></select></label>
  <label><span data-i18n="color">Color</span><select id="accent"><option value="blue" data-i18n="c_blue">Blue</option><option value="violet" data-i18n="c_violet">Violet</option><option value="teal" data-i18n="c_teal">Teal</option><option value="green" data-i18n="c_green">Green</option><option value="orange" data-i18n="c_orange">Orange</option><option value="pink" data-i18n="c_pink">Pink</option><option value="mono" data-i18n="c_mono">Monochrome</option></select></label>
+
 </div>
+</header>
 <main>
-<h1>Potential-Man</h1>
 <section class="stage" aria-label="Preview">
  <canvas id="cv" width="1024" height="741" role="img" aria-label="Meme preview"></canvas>
  <p class="hint" data-i18n="hint">Drag the text to move it.</p>
@@ -245,7 +260,7 @@ POTENTIAL</textarea></label>
  });
  ['txt','font','align','size','lh','ws','glow','stroke','opos','grad','small','upper','rtl','fh','fv','c1','c2'].forEach(function(id){$(id).addEventListener('input',update)});
  $('fh').addEventListener('change',function(){
-  pos.x=1-pos.x;var a=$('align').value;$('align').value=a==='left'?'right':a==='right'?'left':a;prevAlign=$('align').value;draw();
+  pos.x=1-pos.x;var a=$('align').value;$('align').value=a==='left'?'right':a==='right'?'left':a;prevAlign=$('align').value;ddSyncAll();draw();
  });
  $('chips').addEventListener('click',function(e){var t=e.target.getAttribute&&e.target.getAttribute('data-t');if(t){$('txt').value=t;update()}});
  $('center').addEventListener('click',function(){pos={x:defX($('align').value),y:.845};draw()});
@@ -268,7 +283,7 @@ POTENTIAL</textarea></label>
  ids.forEach(function(id){var e=$(id);defs[id]=e.type==='checkbox'?e.checked:e.value});
  $('reset').addEventListener('click',function(){
   ids.forEach(function(id){var e=$(id);if(e.type==='checkbox')e.checked=defs[id];else e.value=defs[id]});
-  $('bgFile').value='';prevAlign=$('align').value;pos={x:defX(prevAlign),y:.845};useDefault();update();say('reset_done');
+  $('bgFile').value='';prevAlign=$('align').value;pos={x:defX(prevAlign),y:.845};useDefault();ddSyncAll();update();say('reset_done');
  });
  $('bgReset').addEventListener('click',function(){$('bgFile').value='';useDefault()});
  function blob(){return new Promise(function(r){cv.toBlob(r,'image/png')})}
@@ -393,6 +408,61 @@ POTENTIAL</textarea></label>
   catch(e){say('gif_fail')}
   refreshGifBtn();
  });
+
+ /* ---- custom dropdowns (the native <select> stays hidden and keeps the value) ---- */
+ var CHEV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
+ var DDS=[],ddOpen=null;
+ function makeDD(sel){
+  var btn=document.createElement('button');btn.type='button';btn.className='ddbtn dd';btn.setAttribute('aria-haspopup','listbox');btn.setAttribute('aria-expanded','false');
+  btn.innerHTML='<span class="ddlbl"></span>'+CHEV;
+  var list=document.createElement('ul');list.className='ddlist';list.setAttribute('role','listbox');list.hidden=true;document.body.appendChild(list);
+  sel.parentNode.insertBefore(btn,sel);sel.style.display='none';
+  var dd={sel:sel,btn:btn,list:list,act:0};
+  function cur(){var o=sel.options[sel.selectedIndex];return o?o.textContent:''}
+  dd.sync=function(){btn.firstChild.textContent=cur();var lab=sel.closest('label'),nm=lab&&lab.firstElementChild&&lab.firstElementChild!==btn?lab.firstElementChild.textContent:'';btn.setAttribute('aria-label',(nm?nm+': ':'')+cur())};
+  dd.build=function(){
+   list.innerHTML='';
+   Array.prototype.forEach.call(sel.options,function(o,i){
+    var li=document.createElement('li');li.setAttribute('role','option');li.id='dd-'+sel.id+'-'+i;li.textContent=o.textContent;
+    li.setAttribute('aria-selected',String(i===sel.selectedIndex));
+    if(sel.id==='font'&&FONTS[o.value]){li.style.fontFamily=FONTS[o.value][1];li.style.fontWeight=FONTS[o.value][0]}
+    li.addEventListener('click',function(e){e.stopPropagation();dd.pick(i)});
+    li.addEventListener('pointermove',function(){if(dd.act!==i)dd.hl(i)});
+    list.appendChild(li);
+   });
+  };
+  dd.hl=function(i){dd.act=i;Array.prototype.forEach.call(list.children,function(li,j){li.classList.toggle('act',j===i)});var c=list.children[i];btn.setAttribute('aria-activedescendant',c?c.id:'');if(c&&c.scrollIntoView)c.scrollIntoView({block:'nearest'})};
+  dd.pick=function(i){var ch=sel.selectedIndex!==i;sel.selectedIndex=i;dd.close();dd.sync();btn.focus();if(ch){sel.dispatchEvent(new Event('input',{bubbles:true}));sel.dispatchEvent(new Event('change',{bubbles:true}))}};
+  dd.open=function(){
+   if(ddOpen&&ddOpen!==dd)ddOpen.close();
+   dd.build();list.hidden=false;list.style.visibility='hidden';btn.setAttribute('aria-expanded','true');
+   var r=btn.getBoundingClientRect(),vw=window.innerWidth,vh=window.innerHeight;list.style.minWidth=r.width+'px';
+   var w=list.offsetWidth,h=list.offsetHeight,rtl=document.documentElement.dir==='rtl',left=rtl?r.right-w:r.left;
+   left=Math.max(8,Math.min(left,vw-8-w));var top=r.bottom+6;if(top+h>vh-8&&r.top-6-h>8)top=r.top-6-h;
+   list.style.left=left+'px';list.style.top=top+'px';list.style.visibility='';
+   ddOpen=dd;dd.hl(Math.max(0,sel.selectedIndex));
+  };
+  dd.close=function(){list.hidden=true;btn.setAttribute('aria-expanded','false');if(ddOpen===dd)ddOpen=null};
+  btn.addEventListener('click',function(e){e.stopPropagation();if(list.hidden)dd.open();else dd.close()});
+  btn.addEventListener('keydown',function(e){
+   var k=e.key,n=sel.options.length;
+   if(list.hidden){if(k==='ArrowDown'||k==='ArrowUp'||k==='Enter'||k===' '){e.preventDefault();dd.open()}return}
+   if(k==='ArrowDown'){e.preventDefault();dd.hl(Math.min(n-1,dd.act+1))}
+   else if(k==='ArrowUp'){e.preventDefault();dd.hl(Math.max(0,dd.act-1))}
+   else if(k==='Home'){e.preventDefault();dd.hl(0)}
+   else if(k==='End'){e.preventDefault();dd.hl(n-1)}
+   else if(k==='Enter'||k===' '){e.preventDefault();dd.pick(dd.act)}
+   else if(k==='Escape'){e.preventDefault();e.stopPropagation();dd.close()}
+   else if(k==='Tab'){dd.close()}
+  });
+  dd.sync();DDS.push(dd);return dd;
+ }
+ function ddSyncAll(){DDS.forEach(function(d){d.sync()})}
+ function ddCloseAll(){DDS.forEach(function(d){d.close()})}
+ document.addEventListener('click',function(e){if(ddOpen&&!(e.target.closest&&e.target.closest('.ddlist')))ddOpen.close()});
+ window.addEventListener('resize',ddCloseAll);
+ window.addEventListener('scroll',function(e){if(ddOpen&&!(e.target&&e.target.closest&&e.target.closest('.ddlist')))ddOpen.close()},true);
+ ['font','align','opos','gifW','lang','mode','accent'].forEach(function(id){makeDD($(id))});
  (function(){
   var d=document.documentElement,mS=$('mode'),aS=$('accent');
   function syncBars(){try{var c=document.createElement('canvas').getContext('2d');c.fillStyle='#000';c.fillStyle=getComputedStyle(document.body).backgroundColor;c.fillRect(0,0,1,1);var q=c.getImageData(0,0,1,1).data;$('tc').setAttribute('content','#'+[q[0],q[1],q[2]].map(function(v){return ('0'+v.toString(16)).slice(-2)}).join(''))}catch(e){}}
@@ -411,7 +481,7 @@ POTENTIAL</textarea></label>
    document.querySelectorAll('[data-i18n]').forEach(function(e){var v=T[l][e.getAttribute('data-i18n')];if(v!=null)e.textContent=v});
    document.querySelectorAll('[data-i18n-title]').forEach(function(e){e.title=T[l][e.getAttribute('data-i18n-title')]});
    document.querySelectorAll('[data-i18n-aria]').forEach(function(e){e.setAttribute('aria-label',T[l][e.getAttribute('data-i18n-aria')])});
-   syncOut();refreshGifBtn();say('');
+   syncOut();refreshGifBtn();say('');ddSyncAll();
    if(save)try{localStorage.setItem('gmm-lang',l)}catch(e){}
   }
   var l0='';try{l0=localStorage.getItem('gmm-lang')||''}catch(e){}
@@ -419,9 +489,9 @@ POTENTIAL</textarea></label>
   lS.value=l0;setLang(l0,false);
   lS.addEventListener('change',function(){setLang(lS.value,true)});
   var gear=$('gear'),pop=$('pop');
-  function closePop(){pop.hidden=true;gear.setAttribute('aria-expanded','false')}
+  function closePop(){pop.hidden=true;gear.setAttribute('aria-expanded','false');ddCloseAll()}
   gear.addEventListener('click',function(e){e.stopPropagation();var open=pop.hidden;pop.hidden=!open;gear.setAttribute('aria-expanded',String(open))});
-  document.addEventListener('click',function(e){if(!pop.hidden&&!pop.contains(e.target))closePop()});
+  document.addEventListener('click',function(e){if(!pop.hidden&&!pop.contains(e.target)&&!(e.target.closest&&e.target.closest('.ddlist')))closePop()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!pop.hidden){closePop();gear.focus()}});
   mS.addEventListener('change',apply);aS.addEventListener('change',apply);apply();
  })();
